@@ -9,10 +9,31 @@ def search_menu():
         print('b) Range of dates')
         print('c) Exact Search')
         print('d) Regex Pattern')
-        print('e) Return to menu')
+        print('e) Return to main menu')
+        user_choice = get_user_choice()
+        if user_choice.lower() == 'a':
+            print('you chose a')
+        elif user_choice.lower() == 'b':
+            print('you chose b')
+        elif user_choice.lower() == 'c':
+            print('you chose c')
+        elif user_choice.lower() == 'd':
+            print('you chose d')
+        elif user_choice.lower() == 'e':
+            waiting_for_input = False
+        else:
+            print('Command not recognized')
 
-# TODO log the task to a csv
-def log_task():
+
+def save_to_csv(task):
+    with open('log.csv', mode='a') as log_csv:
+        fieldnames = ['date', 'title', 'time', 'notes']
+        log_writer = csv.DictWriter(log_csv, fieldnames)
+        log_writer.writeheader()
+        log_writer.writerow({'date': task['date'], 'title': task['title'], 'time': task['time'], 'notes': task['notes']})
+
+
+def gather_task_data():
     print('Date of the task')
     task_date = input('Please use DD/MM/YYYY: ')
     task_title = input('Title of the task: ')
@@ -24,7 +45,7 @@ def log_task():
         'time': task_time,
         'notes': task_notes
     }
-    print(task)
+    save_to_csv(task)
 
 
 def get_user_choice():
@@ -45,7 +66,7 @@ def init():
         print_menu()
         user_choice = get_user_choice()
         if user_choice.lower() == 'a':
-            log_task()
+            gather_task_data()
         elif user_choice.lower() == 'b':
             search_menu()
         elif user_choice.lower() == 'c':
