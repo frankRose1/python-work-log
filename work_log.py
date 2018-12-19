@@ -1,4 +1,7 @@
-import csv
+"""
+    Main file for the application
+"""
+from log_utils import check_for_log, save_to_log
 
 
 def search_menu():
@@ -25,14 +28,6 @@ def search_menu():
             print('Command not recognized')
 
 
-def save_to_csv(task):
-    with open('log.csv', mode='a') as log_csv:
-        fieldnames = ['date', 'title', 'time', 'notes']
-        log_writer = csv.DictWriter(log_csv, fieldnames)
-        log_writer.writeheader()
-        log_writer.writerow({'date': task['date'], 'title': task['title'], 'time': task['time'], 'notes': task['notes']})
-
-
 def gather_task_data():
     print('Date of the task')
     task_date = input('Please use DD/MM/YYYY: ')
@@ -45,7 +40,7 @@ def gather_task_data():
         'time': task_time,
         'notes': task_notes
     }
-    save_to_csv(task)
+    save_to_log(task)
 
 
 def get_user_choice():
@@ -61,6 +56,7 @@ def print_menu():
 
 
 def init():
+    check_for_log()
     waiting_for_input = True
     while waiting_for_input:
         print_menu()
