@@ -2,7 +2,7 @@
     Main file for the application
 """
 from log_utils import check_for_log, save_to_log
-
+from search_utils import search_tasks, search_exact_date
 
 def search_menu():
     waiting_for_input = True
@@ -15,7 +15,8 @@ def search_menu():
         print('e) Return to main menu')
         user_choice = get_user_choice()
         if user_choice.lower() == 'a':
-            print('you chose a')
+            date = get_date_input()
+            search_tasks(date, search_exact_date)
         elif user_choice.lower() == 'b':
             print('you chose b')
         elif user_choice.lower() == 'c':
@@ -25,7 +26,7 @@ def search_menu():
         elif user_choice.lower() == 'e':
             waiting_for_input = False
         else:
-            print('Command not recognized')
+            print('Command not recognized, please try again')
 
 
 def gather_task_data():
@@ -41,6 +42,12 @@ def gather_task_data():
         'notes': task_notes
     }
     save_to_log(task)
+
+
+def get_date_input():
+    print('Date of the task')
+    task_date = input('Please use DD/MM/YYYY: ')
+    return task_date
 
 
 def get_user_choice():
