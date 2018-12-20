@@ -1,8 +1,11 @@
 """
     Main file for the application
 """
+import datetime
+
 from log_utils import check_for_log, save_to_log
 from search_utils import search_tasks, search_exact_date
+
 
 def search_menu():
     waiting_for_input = True
@@ -30,8 +33,7 @@ def search_menu():
 
 
 def gather_task_data():
-    print('Date of the task')
-    task_date = input('Please use DD/MM/YYYY: ')
+    task_date = get_date_input()
     task_title = input('Title of the task: ')
     task_time = input('Time spent (rounded in minutes): ')
     task_notes = input('Notes (Optional, you can leave this empty): ')
@@ -45,9 +47,19 @@ def gather_task_data():
 
 
 def get_date_input():
-    print('Date of the task')
-    task_date = input('Please use DD/MM/YYYY: ')
-    return task_date
+    waiting_for_valid_date = True
+    while waiting_for_valid_date:
+        print('Date of the task')
+        date_input = input('Please use DD/MM/YYYY: ')
+        date_list = [int(date) for date in date_input.split('/')]
+        print(date_list)
+        try:
+            task_date = datetime.date(date_list[2], date_list[1], date_list[0])
+            waiting_for_valid_date = False
+            return date_input
+        except ValueError:
+            print('Error: {} doesn\'t seem to be a valid date'.format(date_input))
+            input('Press enter to try again ')
 
 
 def get_user_choice():
