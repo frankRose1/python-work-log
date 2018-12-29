@@ -7,8 +7,7 @@ class LogUtil:
 
     @classmethod
     def clear_terminal(cls):
-        # os.system('cls' if os.name == 'nt' else 'clear')
-        os.system('clear')
+        os.system('cls' if os.name == 'nt' else 'clear')
 
     @classmethod
     def save_to_log(cls, task):
