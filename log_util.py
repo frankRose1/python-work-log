@@ -51,3 +51,6 @@ class LogUtil:
                 fieldnames = ['date', 'title', 'time', 'notes']
                 log_writer = csv.DictWriter(csv_file, fieldnames)
                 log_writer.writeheader()
+                return True
+        else:
+            return True

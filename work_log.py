@@ -1,5 +1,6 @@
 """
     Main file for the application
+    Provides an interface for a user to create and read tasks on the file system.
 """
 import datetime
 from collections import OrderedDict
@@ -26,7 +27,7 @@ SEARCH_MENU = OrderedDict([
 class WorkLog:
     """ Provides the interface needed for a user to interact with the application """
     def __init__(self):
-        self.tasks = LogUtil.load_tasks()
+        self.tasks = self.set_tasks()
         self.prompt_user()
 
     def search_menu(self):
@@ -111,9 +112,13 @@ class WorkLog:
         print('What would you like to do?')
         for key, value in MAIN_MENU.items():
             print('{}) {}'.format(key, value))
+    
+    def set_tasks(self):
+        """Make sure the log file is there before trying to load it in"""
+        if LogUtil.check_for_log():
+            return LogUtil.load_tasks()
 
     def prompt_user(self):
-        LogUtil.check_for_log()
         while True:
             LogUtil.clear_terminal()
             self.print_menu()
