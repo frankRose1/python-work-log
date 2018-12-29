@@ -1,9 +1,15 @@
 import csv
 import os
 
+
 class LogUtil:
     """Helper class to write/read to the csv log file"""
-    
+
+    @classmethod
+    def clear_terminal(cls):
+        # os.system('cls' if os.name == 'nt' else 'clear')
+        os.system('clear')
+
     @classmethod
     def save_to_log(cls, task):
         """Saves the task to the log.csv file.
@@ -16,7 +22,6 @@ class LogUtil:
             log_writer = csv.DictWriter(log_csv, fieldnames)
             log_writer.writerow(
                 {'date': task['date'], 'title': task['title'], 'time': task['time'], 'notes': task['notes']})
-            
 
     @classmethod
     def load_tasks(cls):
@@ -34,7 +39,6 @@ class LogUtil:
         except FileNotFoundError:
             print('Error: "log.csv" file not found!')
             return None
-
 
     @classmethod
     def check_for_log(cls):

@@ -2,7 +2,6 @@
     Main file for the application
 """
 import datetime
-import os
 from collections import OrderedDict
 
 # import classes
@@ -23,9 +22,6 @@ SEARCH_MENU = OrderedDict([
     ('e', 'Return to main menu')
 ])
 
-def clear_terminal():
-    os.system('cls' if os.name == 'nt' else 'clear')
-
 
 class WorkLog:
     """ Provides the interface needed for a user to interact with the application """
@@ -34,8 +30,8 @@ class WorkLog:
         self.prompt_user()
 
     def search_menu(self):
-        clear_terminal()
         while True:
+            LogUtil.clear_terminal()
             print('Do you want to search by:')
             for key, value in SEARCH_MENU.items():
                 print('{}) {}'.format(key, value))
@@ -61,6 +57,7 @@ class WorkLog:
                 print('Option not recognized, please try again')
 
     def gather_task_data(self):
+        LogUtil.clear_terminal()
         task_date = self.get_date_input()
         task_title = self.get_user_input('Task title: ')
         task_time = self.get_time_input()
@@ -76,6 +73,7 @@ class WorkLog:
         LogUtil.save_to_log(task)
         self.tasks.append(OrderedDict(
             [('date', task_date), ('title', task_title), ('time', task_time), ('notes', task_notes)]))
+        LogUtil.clear_terminal()
         input('The entry has been added! Press enter to return to the menu ')
 
 
@@ -88,7 +86,7 @@ class WorkLog:
                 waiting_for_valid_time = False
                 return time
             except ValueError:
-                input('Please enter numbers only! Press enter to try again ')
+                print('"{}" is not a valid input! Please enter numbers only'.format(minutes))
 
 
     def get_date_input(self):
@@ -96,15 +94,12 @@ class WorkLog:
         while waiting_for_valid_date:
             print('Date of the task')
             date_input = input('Please use DD/MM/YYYY: ').strip()
-            date_list = [int(date) for date in date_input.split('/')]
             try:
-                task_date = datetime.date(
-                    date_list[2], date_list[1], date_list[0])
+                task_date = datetime.datetime.strptime(date_input, '%d/%m/%Y')
                 waiting_for_valid_date = False
                 return date_input
-            except (ValueError, IndexError):
-                print('Error: {} doesn\'t seem to be a valid date'.format(date_input))
-                input('Press enter to try again ')
+            except ValueError:
+                print('Error: "{}" doesn\'t seem to be a valid date'.format(date_input))
 
     def get_user_input(self, message):
         return input(message)
@@ -120,6 +115,7 @@ class WorkLog:
     def prompt_user(self):
         LogUtil.check_for_log()
         while True:
+            LogUtil.clear_terminal()
             self.print_menu()
             user_choice = self.get_user_input('Your choice: ').lower().strip()
             if user_choice == 'a':
@@ -131,7 +127,7 @@ class WorkLog:
             else:
                 print('Option not recognized, please try again.')
 
-        print('User has ended the program.')
+        print('\nUser has ended the program.')
 
 
 if __name__ == '__main__':

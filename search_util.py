@@ -1,4 +1,5 @@
 import re
+from log_util import LogUtil
 
 
 class SearchUtil:
@@ -13,19 +14,28 @@ class SearchUtil:
         """
         if len(matching_tasks) >= 1:
             for task in matching_tasks:
+                LogUtil.clear_terminal()
                 print('-'*25)
                 print('Date: {}'.format(task['date']))
                 print('Title: {}'.format(task['title']))
                 print('Time Spent: {} minutes'.format(task['time']))
                 if len(task['notes']) > 0:
                     print('Notes: {}'.format(task['notes']))
-                print('-'*25)
+                print('\n'+'-'*25)
+                # allow user to cycle through entries
+                print('N) for next entry')
+                print('q) to return to search menu ')
+                next_action = input('Action: [Nq] ').lower().strip()
+
+                if next_action == 'q':
+                    break
         else:
-            print('Sorry, no tasks found.')
+            LogUtil.clear_terminal()
+            input('Sorry, no tasks found. Press enter to return to search menu ')
 
     @staticmethod
     def search_tasks(search_query, tasks, search_fn):
-        """Checks that tasks were returned before attempting to search.
+        """Checks that tasks were loaded from the log file before attempting to search.
 
         Arguments:
             :search_query: Searching by date, time, title etc.
@@ -82,6 +92,6 @@ class SearchUtil:
         """
         raw_str_pattern = r''+pattern
         matching_tasks = [task for task in tasks if (
-            re.search(raw_str_pattern, task['title'])) != None or
-            (re.search(raw_str_pattern, task['notes'])) != None]
+            re.search(raw_str_pattern, task['title'], re.I)) != None or
+            (re.search(raw_str_pattern, task['notes'], re.I)) != None]
         cls.print_tasks(matching_tasks)
